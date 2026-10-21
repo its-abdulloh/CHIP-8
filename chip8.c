@@ -1,4 +1,3 @@
-#include <cstdint>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -100,6 +99,16 @@ uint8_t randomByte(){
 void fetch(){
     chip8.opcode = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
     chip8.pc+=2;
+}
+
+void decode(){
+    uint8_t op = (chip8.opcode & 0xF000)>>12;
+    uint8_t x = (chip8.opcode & 0x0F00)>>8;
+    uint8_t y = (chip8.opcode & 0x00F0)>>4;
+    uint8_t n = chip8.opcode & 0x000F;
+    uint8_t kk = chip8.opcode & 0x00FF;
+    uint16_t nnn = chip8.opcode & 0x0FFF;
+    
 }
 
 int main(){
