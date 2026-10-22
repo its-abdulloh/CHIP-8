@@ -5,40 +5,15 @@
 #include <time.h>
 #include <stdbool.h>
 #include "include/fontset.h"
+#include "include/instructions.h"
+#include "include/chip8.h"
 
 
 //memory map
 // 0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
 // 0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
 // 0x200-0xFFF - Program ROM and work RAM
-#define MEMORY_SIZE 4096
 #define ROM_START 0x200
-
-
-typedef struct 
-{
-    //registers
-    uint8_t V[16];
-    //4096 bytes of memory
-    uint8_t memory[MEMORY_SIZE];
-    //index register
-    uint16_t I;
-    //program counter
-    uint16_t pc;
-    //stack
-    uint16_t stack[16];
-    //stack pointer
-    uint8_t sp;
-    //timers
-    uint8_t delayTimer;
-    uint8_t soundTimer;
-    //keypad
-    uint8_t keypad[16];
-    //graphics
-    uint32_t video[64*32];
-    //operation code
-    uint16_t opcode;
-} Chip8;
 
 Chip8 chip8;
 
@@ -108,7 +83,32 @@ void decode(){
     uint8_t n = chip8.opcode & 0x000F;
     uint8_t kk = chip8.opcode & 0x00FF;
     uint16_t nnn = chip8.opcode & 0x0FFF;
-    
+
+    switch (op) {
+        case 0:
+        if (kk==0xE0) {
+            //CLS
+        }
+        else if (kk==0xEE) {
+            //RET
+        }
+        break;
+        case 1:
+        //JMP to nnn
+        break;
+        case 6:
+        //Set vx to kk
+        break;
+        case 7:
+        //ADD kk to vx
+        break;
+        case 0xA:
+        //Set I to nnn
+        break;
+        case 0xD:
+        //draw
+        break;
+    }
 }
 
 int main(){

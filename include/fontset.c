@@ -1,4 +1,4 @@
-#include "include/fontset.h"
+#include "fontset.h"
 
 uint8_t fontset[FONTSET_SIZE] =
 {
