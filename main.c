@@ -56,6 +56,7 @@ int LoadROM(char const *filename){
         return 0;
     }
 
+    rewind(file);
     size_t bytes_read = fread(&chip8.memory[ROM_START], 1, (size_t) file_size, file);
 
     fclose(file);
@@ -74,6 +75,7 @@ int LoadROM(char const *filename){
 void fetch(){
     chip8.opcode = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
     chip8.pc+=2;
+    printf("PC: %03X OPCODE: %04X\n", chip8.pc, chip8.opcode);
 }
 
 void decode_exec(){
@@ -93,6 +95,9 @@ void decode_exec(){
         break;
         case 6:
         chip8_6XKK(&chip8, x, kk);
+        break;
+        case 7:
+        chip8_7XKK(&chip8, x, kk);
         break;
         case 0xA:
         chip8_ANNN(&chip8, nnn);
