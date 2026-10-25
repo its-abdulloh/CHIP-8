@@ -10,7 +10,7 @@ const int WIDTH = 64;
 const int HEIGHT = 32;
 const int SCALE = 10;
 
-int init(){
+int display_init(){
     SDL_Init(SDL_INIT_VIDEO);
     
     window = SDL_CreateWindow(
@@ -32,7 +32,7 @@ int init(){
     return 0;
 }
 
-void draw(uint8_t* video) {
+void draw(uint32_t video[]) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
@@ -61,7 +61,7 @@ void draw(uint8_t* video) {
     SDL_RenderPresent(renderer);
 }
 
-void quit(){
+void display_quit(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

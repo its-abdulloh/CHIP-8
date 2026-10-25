@@ -2,6 +2,6 @@
 
 #include <SDL2/SDL.h>
 
-int init();
-void draw(uint8_t* video);
-void quit();
+int display_init();
+void draw(uint32_t video[]);
+void display_quit();

@@ -26,6 +26,7 @@ void initialize(){
     for (unsigned int i=0;i<FONTSET_SIZE;i++){
         chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
     }
+    display_init();
     return;
 }
 
@@ -98,6 +99,7 @@ void decode_exec(){
         break;
         case 0xD:
         chip8_DXYN(&chip8, x, y, n);
+        draw(chip8.video);
         break;
     }
 }
@@ -108,9 +110,17 @@ int main(){
         fprintf(stderr, "Failed to load ROM. Exiting.\n");
         return EXIT_FAILURE;
     }
-    while (true){
+    bool running = true;
+    SDL_Event event;
+    while (running){
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
         fetch();
         decode_exec();
     }
+    display_quit();
     return EXIT_SUCCESS;
 }
