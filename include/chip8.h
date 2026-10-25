@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 4096
+#define WIDTH 64
+#define HEIGHT 32
 
 typedef struct 
 {
@@ -24,7 +26,7 @@ typedef struct
     //keypad
     uint8_t keypad[16];
     //graphics
-    uint32_t video[64*32];
+    uint32_t video[WIDTH*HEIGHT];
     //operation code
     uint16_t opcode;
 } Chip8;

@@ -1,12 +1,14 @@
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h> 
 #include <time.h>
 #include <stdbool.h>
 #include "include/fontset.h"
 #include "include/instructions.h"
 #include "include/chip8.h"
+#include "include/display.h"
 
 
 //memory map
@@ -17,6 +19,16 @@
 
 Chip8 chip8;
 
+void initialize(){
+    chip8 = (Chip8){0};
+
+    srand((unsigned int)time(NULL));
+    for (unsigned int i=0;i<FONTSET_SIZE;i++){
+        chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
+    }
+    return;
+}
+
 int LoadROM(char const *filename){
     FILE *file = fopen(filename,"rb");
 
@@ -25,7 +37,7 @@ int LoadROM(char const *filename){
         return 0;
     }
 
-    if (fseek(file, 0, SEEK_END!=0)){
+    if (fseek(file, 0, SEEK_END)!=0){
         fclose(file);
         return 0;
     }
@@ -57,26 +69,13 @@ int LoadROM(char const *filename){
     return 1;
 }
 
-void initialize(){
-    chip8 = (Chip8){0};
-    for (unsigned int i=0;i<FONTSET_SIZE;i++){
-        chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
-    }
-    return;
-}
-
-uint8_t randomByte(){
-    srand(time(NULL));
-    uint8_t random_num = rand() % (255 - 0 + 1) + 0;
-    return random_num;
-}
 
 void fetch(){
     chip8.opcode = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
     chip8.pc+=2;
 }
 
-void decode(){
+void decode_exec(){
     uint8_t op = (chip8.opcode & 0xF000)>>12;
     uint8_t x = (chip8.opcode & 0x0F00)>>8;
     uint8_t y = (chip8.opcode & 0x00F0)>>4;
@@ -86,36 +85,32 @@ void decode(){
 
     switch (op) {
         case 0:
-        if (kk==0xE0) {
-            //CLS
-        }
-        else if (kk==0xEE) {
-            //RET
-        }
+        chip8_00E0(&chip8);
         break;
         case 1:
-        //JMP to nnn
+        chip8_1NNN(&chip8, nnn);
         break;
         case 6:
-        //Set vx to kk
-        break;
-        case 7:
-        //ADD kk to vx
+        chip8_6XKK(&chip8, x, kk);
         break;
         case 0xA:
-        //Set I to nnn
+        chip8_ANNN(&chip8, nnn);
         break;
         case 0xD:
-        //draw
+        chip8_DXYN(&chip8, x, y, n);
         break;
     }
 }
 
 int main(){
     initialize();
-    LoadROM("IBM Logo.ch8");
-    while (true){
-
+    if (!LoadROM("IBM Logo.ch8")) {
+        fprintf(stderr, "Failed to load ROM. Exiting.\n");
+        return EXIT_FAILURE;
     }
-    return 0;
+    while (true){
+        fetch();
+        decode_exec();
+    }
+    return EXIT_SUCCESS;
 }
