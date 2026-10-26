@@ -1,4 +1,5 @@
 #include "instructions.h"
+#include "chip8.h"
 #include <stdint.h>
 #include <string.h>
 
@@ -50,6 +51,69 @@ void chip8_6XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
 
 void chip8_7XKK(Chip8 *chip8,uint8_t x,uint8_t kk){
     chip8->V[x]+=kk;
+}
+
+void chip8_8XY0(Chip8 *chip8, uint8_t x, uint8_t y){
+    chip8->V[x]=chip8->V[y];
+}
+
+void chip8_8XY1(Chip8 *chip8, uint8_t x, uint8_t y){
+    chip8->V[x]|=chip8->V[y];
+}
+
+void chip8_8XY2(Chip8 *chip8, uint8_t x, uint8_t y){
+    chip8->V[x]&=chip8->V[y];
+}
+
+void chip8_8XY3(Chip8 *chip8, uint8_t x, uint8_t y){
+    if (chip8->V[x]!=chip8->V[y]) {
+        chip8->V[x]=1;
+    }
+    else {
+        chip8->V[x]=0;
+    }
+}
+
+void chip8_8XY4(Chip8 *chip8, uint8_t x, uint8_t y){
+    chip8->V[x]+=chip8->V[y];
+    if (chip8->V[x]>255){
+        chip8->V[0xF]=1;
+    }
+    else {
+        chip8->V[0xF]=0;
+    }
+}
+
+void chip8_8XY5(Chip8 *chip8, uint8_t x, uint8_t y){
+    if (chip8->V[x]>chip8->V[y]){
+        chip8->V[0xF]=1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+    chip8->V[x]= chip8->V[x]-chip8->V[y];
+}
+
+void chip8_8XY6(Chip8 *chip8, uint8_t x, uint8_t y){
+    uint8_t lsb = chip8->V[x] & 1;
+    chip8->V[x] = chip8->V[x]>>1;
+    chip8->V[0xF] = lsb;
+}
+
+void chip8_8XY7(Chip8 *chip8, uint8_t x, uint8_t y){
+    if (chip8->V[y]>chip8->V[x]){
+        chip8->V[0xF]=1;
+    }
+    else {
+        chip8->V[0xF] = 0;
+    }
+    chip8->V[x] = chip8->V[y]-chip8->V[x];
+}
+
+void chip8_8XYE(Chip8 *chip8, uint8_t x, uint8_t y){
+    uint8_t msb = (chip8->V[x] & 0x80) >> 7;
+    chip8->V[x] = chip8->V[x]<<1;
+    chip8->V[0xF] = msb;   
 }
 
 void chip8_9XY0(Chip8 *chip8, uint8_t x, uint8_t y){

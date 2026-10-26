@@ -116,6 +116,37 @@ void decode_exec(){
         case 7:
         chip8_7XKK(&chip8, x, kk);
         break;
+        case 8:
+        switch (n) {
+            case 0:
+            chip8_8XY0(&chip8, x, y);
+            break;        
+            case 1:
+            chip8_8XY1(&chip8, x, y);
+            break;
+            case 2:
+            chip8_8XY2(&chip8, x, y);
+            break;
+            case 3:
+            chip8_8XY3(&chip8, x, y);
+            break;
+            case 4:
+            chip8_8XY4(&chip8, x, y);
+            break;
+            case 5:
+            chip8_8XY5(&chip8, x, y);
+            break;
+            case 6:
+            chip8_8XY6(&chip8, x, y);
+            break;
+            case 7:
+            chip8_8XY7(&chip8, x, y);
+            break;
+            case 0xE:
+            chip8_8XYE(&chip8, x, y);
+            break;
+        }
+        break;
         case 9:
         chip8_9XY0(&chip8, x, y);
         break;
