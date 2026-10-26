@@ -88,10 +88,18 @@ void decode_exec(){
 
     switch (op) {
         case 0:
-        chip8_00E0(&chip8);
+        if (kk==0xE0) {
+            chip8_00E0(&chip8);
+        }
+        else if (kk==0xEE) {
+            chip8_00EE(&chip8);
+        }
         break;
         case 1:
         chip8_1NNN(&chip8, nnn);
+        break;
+        case 2:
+        chip8_2NNN(&chip8, nnn);
         break;
         case 6:
         chip8_6XKK(&chip8, x, kk);

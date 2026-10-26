@@ -11,8 +11,19 @@ void chip8_00E0(Chip8 *chip8){
     memset(chip8->video, 0, sizeof(chip8->video));
 }
 
+void chip8_00EE(Chip8 *chip8){
+    chip8->pc=chip8->stack[chip8->sp];
+    chip8->sp-=1;
+}
+
 void chip8_1NNN(Chip8 *chip8,uint16_t nnn){
     chip8->pc = nnn;
+}
+
+void chip8_2NNN(Chip8 *chip8, uint16_t nnn){
+    chip8->sp+=1;
+    chip8->stack[chip8->sp]=chip8->pc;
+    chip8->pc=nnn;
 }
 
 void chip8_6XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
