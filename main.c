@@ -101,11 +101,23 @@ void decode_exec(){
         case 2:
         chip8_2NNN(&chip8, nnn);
         break;
+        case 3:
+        chip8_3XKK(&chip8, x, kk);
+        break;
+        case 4:
+        chip8_4XKK(&chip8, x, kk);
+        break;
+        case 5:
+        chip8_5XY0(&chip8, x, y);
+        break;
         case 6:
         chip8_6XKK(&chip8, x, kk);
         break;
         case 7:
         chip8_7XKK(&chip8, x, kk);
+        break;
+        case 9:
+        chip8_9XY0(&chip8, x, y);
         break;
         case 0xA:
         chip8_ANNN(&chip8, nnn);

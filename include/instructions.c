@@ -26,12 +26,36 @@ void chip8_2NNN(Chip8 *chip8, uint16_t nnn){
     chip8->pc=nnn;
 }
 
+void chip8_3XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
+    if (chip8->V[x]==kk) {
+        chip8->pc+=2;
+    }
+}
+
+void chip8_4XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
+    if (chip8->V[x]!=kk) {
+        chip8->pc+=2;
+    }
+}
+
+void chip8_5XY0(Chip8 *chip8, uint8_t x, uint8_t y){
+    if (chip8->V[x]==chip8->V[y]) {
+        chip8->pc+=2;
+    }
+}
+
 void chip8_6XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
     chip8->V[x] = kk;
 }
 
 void chip8_7XKK(Chip8 *chip8,uint8_t x,uint8_t kk){
     chip8->V[x]+=kk;
+}
+
+void chip8_9XY0(Chip8 *chip8, uint8_t x, uint8_t y){
+    if (chip8->V[x]!=chip8->V[y]) {
+        chip8->pc+=2;
+    }
 }
 
 void chip8_ANNN(Chip8 *chip8,uint16_t nnn){
