@@ -20,6 +20,11 @@
 
 Chip8 chip8;
 
+const double instructionTime = 1.0 / 700.0;
+const double timerInterval = 1.0/ 60.0;
+double accumulator = 0.0;
+double timerAccumulator = 0.0;
+
 
 int map_key(SDL_Keycode key)
 {
@@ -206,7 +211,30 @@ int main(){
     }
     bool running = true;
     SDL_Event event;
+    Uint64 start = SDL_GetPerformanceCounter();
+    Uint64 frequency = SDL_GetPerformanceFrequency();
     while (running){
+        Uint64 now = SDL_GetPerformanceCounter();
+        double deltaTime = (double)(now - start) / frequency;
+        start = now;
+        accumulator += deltaTime;
+        timerAccumulator += deltaTime;
+        fetch();
+        
+        while (accumulator >= instructionTime){
+            decode_exec();
+            accumulator -= instructionTime;
+        }
+
+        while (timerAccumulator >= timerInterval){
+            if (chip8.delayTimer>0)
+                chip8.delayTimer--;
+            if (chip8.soundTimer>0)
+                chip8.soundTimer--;
+
+            timerAccumulator -= timerInterval;
+        }
+        
         //handle keys
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -225,8 +253,6 @@ int main(){
                     chip8.keypad[key]=0;
             }
         }
-        fetch();
-        decode_exec();
     }
     display_quit();
     return EXIT_SUCCESS;
