@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_video.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -18,6 +19,34 @@
 #define ROM_START 0x200
 
 Chip8 chip8;
+
+
+int map_key(SDL_Keycode key)
+{
+    switch (key) {
+        case SDL_SCANCODE_1: return 0x1;
+        case SDL_SCANCODE_2: return 0x2;
+        case SDL_SCANCODE_3: return 0x3;
+        case SDL_SCANCODE_4: return 0xC;
+
+        case SDL_SCANCODE_Q: return 0x4;
+        case SDL_SCANCODE_W: return 0x5;
+        case SDL_SCANCODE_E: return 0x6;
+        case SDL_SCANCODE_R: return 0xD;
+
+        case SDL_SCANCODE_A: return 0x7;
+        case SDL_SCANCODE_S: return 0x8;
+        case SDL_SCANCODE_D: return 0x9;
+        case SDL_SCANCODE_F: return 0xE;
+
+        case SDL_SCANCODE_Z: return 0xA;
+        case SDL_SCANCODE_X: return 0x0;
+        case SDL_SCANCODE_C: return 0xB;
+        case SDL_SCANCODE_V: return 0xF;
+
+        default: return -1;
+    }
+}
 
 void initialize(){
     chip8 = (Chip8){0};
@@ -153,6 +182,15 @@ void decode_exec(){
         case 0xA:
         chip8_ANNN(&chip8, nnn);
         break;
+        case 0xB:
+        chip8_BNNN(&chip8,nnn);
+        break;
+        case 0xC:
+        chip8_CXKK(&chip8, x, kk);
+        break;
+        case 0xE:
+        chip8_EX9E(&chip8, x);
+        break;
         case 0xD:
         chip8_DXYN(&chip8, x, y, n);
         draw(chip8.video);
@@ -169,9 +207,22 @@ int main(){
     bool running = true;
     SDL_Event event;
     while (running){
+        //handle keys
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = false;
+            }
+            if (event.type == SDL_KEYDOWN && !event.key.repeat) {
+                int key = map_key(event.key.keysym.scancode);
+
+                if (key != -1)
+                    chip8.keypad[key] = 1;
+            }
+            if (event.type==SDL_KEYUP) {
+                int key = map_key(event.key.keysym.scancode);
+
+                if (key!=-1)
+                    chip8.keypad[key]=0;
             }
         }
         fetch();

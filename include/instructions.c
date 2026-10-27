@@ -126,6 +126,26 @@ void chip8_ANNN(Chip8 *chip8,uint16_t nnn){
     chip8->I = nnn;
 }
 
+void chip8_BNNN(Chip8 *chip8, uint16_t nnn){
+    chip8->pc = nnn+chip8->V[0];
+}
+
+void chip8_CXKK(Chip8 *chip8, uint8_t x, uint8_t kk){
+    chip8->V[x] = randomByte() & kk;
+}
+
+void chip8_EX9E(Chip8 *chip8, uint8_t x){
+    if (chip8->keypad[chip8->V[x]]==1) {
+        chip8->pc+=2;
+    }
+}
+
+void chip8_EXA1(Chip8 *chip8, uint8_t x){
+    if (chip8->keypad[chip8->V[x]]==0) {
+        chip8->pc+=2;
+    }
+}
+
 void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->V[0xF]=0;
     int x_cord = chip8->V[x];
