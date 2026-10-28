@@ -29,4 +29,7 @@ void chip8_BNNN(Chip8 *chip8, uint16_t nnn);
 void chip8_CXKK(Chip8 *chip8,uint8_t x,uint8_t kk);
 void chip8_EX9E(Chip8 *chip8, uint8_t x);
 void chip8_EXA1(Chip8 *chip8, uint8_t x);
+void chip8_FX07(Chip8 *chip8, uint8_t x);
+void chip8_FX15(Chip8 *chip8, uint8_t x);
+void chip8_FX18(Chip8 *chip8, uint8_t x);
 void chip8_DXYN(Chip8 *chip8,uint8_t x,uint8_t y,uint8_t n);

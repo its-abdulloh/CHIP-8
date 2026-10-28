@@ -10,6 +10,7 @@
 #include "include/instructions.h"
 #include "include/chip8.h"
 #include "include/display.h"
+#include "include/sound.h"
 
 
 //memory map
@@ -231,7 +232,7 @@ int main(){
                 chip8.delayTimer--;
             if (chip8.soundTimer>0)
                 chip8.soundTimer--;
-
+            sound_set_enabled(chip8.soundTimer > 0);
             timerAccumulator -= timerInterval;
         }
         
