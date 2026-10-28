@@ -146,6 +146,65 @@ void chip8_EXA1(Chip8 *chip8, uint8_t x){
     }
 }
 
+void chip8_FX07(Chip8 *chip8, uint8_t x){
+    chip8->V[x] = chip8->delayTimer;
+}
+
+void chip8_FX15(Chip8 *chip8, uint8_t x){
+    chip8->delayTimer = chip8->V[x];
+}
+
+void chip8_FX18(Chip8 *chip8, uint8_t x){
+    chip8->soundTimer = chip8->V[x];
+}
+
+void chip8_FX1E(Chip8 *chip8, uint8_t x){
+    chip8->I+=chip8->V[x];
+}
+
+void chip8_FX0A(Chip8 *chip8, uint8_t x){
+    int keypressed = -1;
+    for (int i=0;i<16;i++){
+        if (chip8->keypad[i]==1){
+            keypressed = i;
+            break;
+        }
+    }
+    if(keypressed==-1){
+        chip8->pc -= 2;
+    }
+    else {
+        chip8->V[x]=keypressed;
+    }
+}
+
+void chip8_FX29(Chip8 *chip8, uint8_t x){
+    chip8->I = chip8->V[x] * 5;
+}
+
+void chip8_FX33(Chip8 *chip8, uint8_t x){
+    int number = chip8->V[x];
+    int ones = number%10;
+    int tens = (number/10)%10;
+    int hundreds = (number/100)%10;
+
+    chip8->V[chip8->I] = hundreds;
+    chip8->V[chip8->I+1] = tens;
+    chip8->V[chip8->I+2] = ones;
+}
+
+void chip8_FX55(Chip8 *chip8, uint8_t x){
+    for (int i=0;i<=x;i++){
+        chip8->memory[chip8->I+i] = chip8->V[i];
+    }
+}
+
+void chip8_FX65(Chip8 *chip8, uint8_t x){
+    for (int i=0;i<=x;i++){
+        chip8->V[i] = chip8->memory[chip8->I+i];
+    }
+}
+
 void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->V[0xF]=0;
     int x_cord = chip8->V[x];
