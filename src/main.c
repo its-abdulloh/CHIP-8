@@ -18,6 +18,8 @@
 // 0x200-0xFFF - Program ROM and work RAM
 #define ROM_START 0x200
 
+uint16_t wrong_opcode=0;
+
 Chip8 chip8;
 
 const double instructionTime = 1.0 / 700.0;
@@ -198,7 +200,11 @@ void decode_exec(){
         draw(chip8.video);
         break;
         case 0xE:
-        chip8_EX9E(&chip8, x);
+        if (kk==0x9E){
+            chip8_EX9E(&chip8, x);
+        }else if (kk==0xA1){
+            chip8_EXA1(&chip8, x);
+        }
         break;
         case 0xF:
         switch (kk) {
@@ -250,9 +256,10 @@ int main(){
         start = now;
         accumulator += deltaTime;
         timerAccumulator += deltaTime;
-        fetch();
         
+
         while (accumulator >= instructionTime){
+            fetch();
             decode_exec();
             accumulator -= instructionTime;
         }
