@@ -1,5 +1,5 @@
-#include "instructions.h"
-#include "chip8.h"
+#include "../include/instructions.h"
+#include "../include/chip8.h"
 #include <stdint.h>
 #include <string.h>
 
@@ -95,6 +95,7 @@ void chip8_8XY5(Chip8 *chip8, uint8_t x, uint8_t y){
 }
 
 void chip8_8XY6(Chip8 *chip8, uint8_t x, uint8_t y){
+    (void)y;
     uint8_t lsb = chip8->V[x] & 1;
     chip8->V[x] = chip8->V[x]>>1;
     chip8->V[0xF] = lsb;
@@ -111,6 +112,7 @@ void chip8_8XY7(Chip8 *chip8, uint8_t x, uint8_t y){
 }
 
 void chip8_8XYE(Chip8 *chip8, uint8_t x, uint8_t y){
+    (void)y;
     uint8_t msb = (chip8->V[x] & 0x80) >> 7;
     chip8->V[x] = chip8->V[x]<<1;
     chip8->V[0xF] = msb;   

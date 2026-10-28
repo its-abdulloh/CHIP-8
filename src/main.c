@@ -6,12 +6,11 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
-#include "include/fontset.h"
-#include "include/instructions.h"
-#include "include/chip8.h"
-#include "include/display.h"
-#include "include/sound.h"
-
+#include "../include/fontset.h"
+#include "../include/instructions.h"
+#include "../include/chip8.h"
+#include "../include/display.h"
+#include "../include/sound.h"
 
 //memory map
 // 0x000-0x1FF - Chip 8 interpreter (contains font set in emu)

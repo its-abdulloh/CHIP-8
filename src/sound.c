@@ -1,4 +1,4 @@
-#include "sound.h"
+#include "../include/sound.h"
 
 static SDL_AudioDeviceID device;
 static int beep_enabled = 0;
