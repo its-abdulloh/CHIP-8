@@ -194,12 +194,43 @@ void decode_exec(){
         case 0xC:
         chip8_CXKK(&chip8, x, kk);
         break;
-        case 0xE:
-        chip8_EX9E(&chip8, x);
-        break;
         case 0xD:
         chip8_DXYN(&chip8, x, y, n);
         draw(chip8.video);
+        break;
+        case 0xE:
+        chip8_EX9E(&chip8, x);
+        break;
+        case 0xF:
+        switch (kk) {
+            case 0x07:
+            chip8_FX07(&chip8, x);
+            break;
+            case 0x0A:
+            chip8_FX0A(&chip8, x);
+            break;
+            case 0x15:
+            chip8_FX15(&chip8, x);
+            break;
+            case 0x18:
+            chip8_FX18(&chip8, x);
+            break;
+            case 0x1E:
+            chip8_FX1E(&chip8, x);
+            break;
+            case 0x29:
+            chip8_FX29(&chip8, x);
+            break;
+            case 0x33:
+            chip8_FX33(&chip8, x);
+            break;
+            case 0x55:
+            chip8_FX55(&chip8, x);
+            break;
+            case 0x65:
+            chip8_FX65(&chip8, x);
+            break;
+        }
         break;
     }
 }
