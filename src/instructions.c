@@ -75,13 +75,14 @@ void chip8_8XY3(Chip8 *chip8, uint8_t x, uint8_t y){
 }
 
 void chip8_8XY4(Chip8 *chip8, uint8_t x, uint8_t y){
-    chip8->V[x]+=chip8->V[y];
-    if (chip8->V[x]>255){
+    uint16_t sum = chip8->V[x]+chip8->V[y];
+    if (sum>255){
         chip8->V[0xF]=1;
     }
     else {
         chip8->V[0xF]=0;
     }
+    chip8->V[x] = sum& 0xFF;
 }
 
 void chip8_8XY5(Chip8 *chip8, uint8_t x, uint8_t y){
