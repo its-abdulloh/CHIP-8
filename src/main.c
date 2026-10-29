@@ -28,6 +28,8 @@ double accumulator = 0.0;
 double timerAccumulator = 0.0;
 
 
+
+
 int map_key(SDL_Keycode key)
 {
     switch (key) {
@@ -240,9 +242,15 @@ void decode_exec(){
     }
 }
 
-int main(){
+int main(int argc, char *argv[]){
+    if (argc!=2) {
+        printf("Usage: ./chip8 rom_name\n");
+        return 1;
+    }
+    char *rom_name = argv[1];
+
     initialize();
-    if (!LoadROM("IBM Logo.ch8")) {
+    if (!LoadROM(rom_name)) {
         fprintf(stderr, "Failed to load ROM. Exiting.\n");
         return EXIT_FAILURE;
     }
