@@ -65,6 +65,7 @@ void initialize(){
         chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
     }
     display_init();
+    sound_init();
     return;
 }
 

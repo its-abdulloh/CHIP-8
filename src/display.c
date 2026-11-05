@@ -1,4 +1,5 @@
 #include "display.h"
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -11,7 +12,7 @@ const int HEIGHT = 32;
 const int SCALE = 10;
 
 int display_init(){
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     
     window = SDL_CreateWindow(
         "chip8",

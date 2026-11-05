@@ -9,6 +9,6 @@
 
 
 void audio_callback(void *userdata, Uint8 *stream, int len);
-int init_audio();
+int sound_init();
 void sound_set_enabled(int enabled);
 
