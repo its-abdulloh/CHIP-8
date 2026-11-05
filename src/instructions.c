@@ -65,13 +65,8 @@ void chip8_8XY2(Chip8 *chip8, uint8_t x, uint8_t y){
     chip8->V[x]&=chip8->V[y];
 }
 
-void chip8_8XY3(Chip8 *chip8, uint8_t x, uint8_t y){
-    if (chip8->V[x]!=chip8->V[y]) {
-        chip8->V[x]=1;
-    }
-    else {
-        chip8->V[x]=0;
-    }
+void chip8_8XY3(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->V[x] ^= chip8->V[y];
 }
 
 void chip8_8XY4(Chip8 *chip8, uint8_t x, uint8_t y){
@@ -191,9 +186,9 @@ void chip8_FX33(Chip8 *chip8, uint8_t x){
     int tens = (number/10)%10;
     int hundreds = (number/100)%10;
 
-    chip8->V[chip8->I] = hundreds;
-    chip8->V[chip8->I+1] = tens;
-    chip8->V[chip8->I+2] = ones;
+    chip8->memory[chip8->I] = hundreds;
+    chip8->memory[chip8->I+1] = tens;
+    chip8->memory[chip8->I+2] = ones;
 }
 
 void chip8_FX55(Chip8 *chip8, uint8_t x){

@@ -22,7 +22,7 @@ uint16_t wrong_opcode=0;
 
 Chip8 chip8;
 
-const double instructionTime = 1.0 / 700.0;
+const double instructionTime = 1.0 / 500.0;
 const double timerInterval = 1.0/ 60.0;
 double accumulator = 0.0;
 double timerAccumulator = 0.0;
@@ -113,7 +113,6 @@ int LoadROM(char const *filename){
 void fetch(){
     chip8.opcode = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
     chip8.pc+=2;
-    printf("PC: %03X OPCODE: %04X\n", chip8.pc, chip8.opcode);
 }
 
 void decode_exec(){
