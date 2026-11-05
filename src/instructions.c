@@ -178,7 +178,7 @@ void chip8_FX0A(Chip8 *chip8, uint8_t x){
 }
 
 void chip8_FX29(Chip8 *chip8, uint8_t x){
-    chip8->I = chip8->V[x] * 5;
+    chip8->I = 0x50 + chip8->V[x] * 5;
 }
 
 void chip8_FX33(Chip8 *chip8, uint8_t x){
