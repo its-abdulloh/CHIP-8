@@ -29,4 +29,5 @@ typedef struct
     uint32_t video[WIDTH*HEIGHT];
     //operation code
     uint16_t opcode;
+    int draw_flag;
 } Chip8;

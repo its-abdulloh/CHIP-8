@@ -199,7 +199,6 @@ void decode_exec(){
         break;
         case 0xD:
         chip8_DXYN(&chip8, x, y, n);
-        draw(chip8.video);
         break;
         case 0xE:
         if (kk==0x9E){
@@ -299,6 +298,13 @@ int main(int argc, char *argv[]){
                     chip8.keypad[key]=0;
             }
         }
+
+        if (chip8.draw_flag){
+            draw(chip8.video);
+            chip8.draw_flag = 0;
+        }
+
+        SDL_Delay(1);
     }
     display_quit();
     return EXIT_SUCCESS;

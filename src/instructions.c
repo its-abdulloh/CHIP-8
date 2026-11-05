@@ -1,5 +1,6 @@
 #include "../include/instructions.h"
 #include "../include/chip8.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -226,5 +227,6 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
             }
         }
     }
+    chip8->draw_flag = 1;
 }
 
