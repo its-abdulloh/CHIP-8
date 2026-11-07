@@ -208,22 +208,77 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->V[0xF]=0;
     int x_cord = chip8->V[x];
     int y_cord = chip8->V[y];
-    for (int i=0;i<n;i++){
-        uint8_t sprite = chip8->memory[chip8->I+i];
+    if(n!=0){
+        for (int i=0;i<n;i++){
+            uint8_t sprite = chip8->memory[chip8->I+i];
 
-        for (int bit=0;bit<8;bit++){
-            int pixel = (sprite >> (7 - bit)) & 1;
+            for (int bit=0;bit<8;bit++){
+                int pixel = (sprite >> (7 - bit)) & 1;
 
-            if (pixel == 1) {
-                int px = (x_cord + bit) % 64;
-                int py = (y_cord + i) % 32;
-                int index = py * 64 + px;
-
-                if (chip8->video[index] == 1) {
-                    chip8->V[0xF] = 1;
+                if (pixel == 1) {
+                    int index;
+                    if(chip8->high_res==0){
+                        int px = ((x_cord + bit) % 64)*2;
+                        int py = ((y_cord + i) % 32)*2;
+                        index = py * 128 + px;
+                        if (chip8->video[index] == 1 ||
+                            chip8->video[index + 1] == 1 ||
+                            chip8->video[index + 128] == 1 ||
+                            chip8->video[index + 129] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[index]^=1;
+                        chip8->video[index+1]^=1;
+                        chip8->video[index+128]^=1;
+                        chip8->video[index+129]^=1;
+                    }
+                    else if (chip8->high_res==1) {
+                        int px = (x_cord + bit) % 128;
+                        int py = (y_cord + i) % 64;
+                        index = py * 128 + px;
+                        if (chip8->video[index] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[index] ^= 1;
+                    }
                 }
+            }
+        }
+    }
+    else if (n==0) {
+        for (int i=0;i<16;i++){
+            uint16_t sprite = (chip8->memory[chip8->I+i*2]<<8 | chip8->memory[chip8->I+i*2+1]);
 
-                chip8->video[index] ^= 1;
+            for (int bit=0;bit<16;bit++){
+                int pixel = (sprite >> (15 - bit)) & 1;
+
+                if (pixel == 1) {
+                    int index;
+                    if(chip8->high_res==0){
+                        int px = ((x_cord + bit) % 64)*2;
+                        int py = ((y_cord + i) % 32)*2;
+                        index = py * 128 + px;
+                        if (chip8->video[index] == 1 ||
+                            chip8->video[index + 1] == 1 ||
+                            chip8->video[index + 128] == 1 ||
+                            chip8->video[index + 129] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[index]^=1;
+                        chip8->video[index+1]^=1;
+                        chip8->video[index+128]^=1;
+                        chip8->video[index+129]^=1;
+                    }
+                    else if (chip8->high_res==1) {
+                        int px = (x_cord + bit) % 128;
+                        int py = (y_cord + i) % 64;
+                        index = py * 128 + px;
+                        if (chip8->video[index] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[index] ^= 1;
+                    }
+                }
             }
         }
     }
