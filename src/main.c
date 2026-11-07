@@ -57,13 +57,11 @@ int map_key(SDL_Keycode key)
     }
 }
 
-void initialize(){
-    chip8 = (Chip8){0};
-
+void initialize(char *mode){
     srand((unsigned int)time(NULL));
-    for (unsigned int i=0;i<FONTSET_SIZE;i++){
-        chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
-    }
+    
+    chip8 = (Chip8){0};
+    
     display_init();
     sound_init();
     return;
@@ -242,13 +240,14 @@ void decode_exec(){
 }
 
 int main(int argc, char *argv[]){
-    if (argc!=2) {
-        printf("Usage: ./chip8 rom_name\n");
+    if (argc!=3) {
+        printf("Usage: ./chip8 mode(ch8,schip) rom_name\n");
         return 1;
     }
-    char *rom_name = argv[1];
+    char *mode = argv[1];
+    char *rom_name = argv[2];
 
-    initialize();
+    initialize(mode);
     if (!LoadROM(rom_name)) {
         fprintf(stderr, "Failed to load ROM. Exiting.\n");
         return EXIT_FAILURE;

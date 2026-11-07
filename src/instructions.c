@@ -230,3 +230,12 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->draw_flag = 1;
 }
 
+void superchip_00FF(Chip8 *chip8){
+    chip8->high_res = 1;
+    memset(chip8->video, 0, sizeof(chip8->video));   
+}
+
+void superchip_00FE(Chip8 *chip8){
+    chip8->high_res = 0;
+    memset(chip8->video, 0, sizeof(chip8->video));
+}

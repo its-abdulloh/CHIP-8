@@ -3,8 +3,8 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 4096
-#define WIDTH 64
-#define HEIGHT 32
+#define WIDTH 128
+#define HEIGHT 64
 
 typedef struct 
 {
@@ -30,4 +30,6 @@ typedef struct
     //operation code
     uint16_t opcode;
     int draw_flag;
+    int high_res;
+    uint8_t rpl[8];
 } Chip8;
