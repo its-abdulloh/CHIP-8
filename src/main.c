@@ -17,7 +17,6 @@
 // 0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
 // 0x200-0xFFF - Program ROM and work RAM
 #define ROM_START 0x200
-
 uint16_t wrong_opcode=0;
 
 Chip8 chip8;
@@ -63,6 +62,10 @@ void initialize(){
 
     for (unsigned int i=0;i<FONTSET_SIZE;i++){
         chip8.memory[FONTSET_START_ADDRESS+i] = fontset[i];
+    }
+
+    for (unsigned int i=0;i<BIG_FONTSIZE; i++) {
+        chip8.memory[FONT_BIG_START_ADDRESS+i] = big_fontset[i];
     }
     
     display_init();
