@@ -67,6 +67,8 @@ void initialize(){
     for (unsigned int i=0;i<BIG_FONTSIZE; i++) {
         chip8.memory[FONT_BIG_START_ADDRESS+i] = big_fontset[i];
     }
+
+    load_rpl(&chip8);
     
     display_init();
     sound_init();

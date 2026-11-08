@@ -205,9 +205,9 @@ void chip8_FX65(Chip8 *chip8, uint8_t x){
 }
 
 void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
-    chip8->V[0xF]=0;
     int x_cord = chip8->V[x];
     int y_cord = chip8->V[y];
+    chip8->V[0xF]=0;
     if(n!=0){
         for (int i=0;i<n;i++){
             uint8_t sprite = chip8->memory[chip8->I+i];
@@ -285,6 +285,8 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->draw_flag = 1;
 }
 
+//SUPER-CHIP instructions
+
 void superchip_00FF(Chip8 *chip8){
     chip8->high_res = 1;
     memset(chip8->video, 0, sizeof(chip8->video));   
@@ -329,5 +331,22 @@ void superchip_00FC(Chip8 *chip8){
         for (int x=WIDTH-4; x<WIDTH; x++) {
             chip8->video[y*WIDTH+x] = 0;
         }
+    }
+}
+
+void superchip_FX30(Chip8 *chip8, uint8_t x){
+    chip8->I = 0xA0 + chip8->V[x]*10;
+}
+
+void superchip_FX75(Chip8 *chip8, uint8_t x){
+    for (int i=0;i<=x;i++){
+        chip8->rpl_flags[i] = chip8->V[i];
+    }
+    save_rpl(chip8);
+}
+
+void superchip_FX85(Chip8 *chip8, uint8_t x){
+    for (int i=0;i<=x;i++){
+        chip8->V[i] = chip8->rpl_flags[i];
     }
 }

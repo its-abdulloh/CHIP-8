@@ -46,3 +46,6 @@ void superchip_00FE(Chip8 *chip8);
 void superchip_00CN(Chip8 *chip8, uint8_t n);
 void superchip_00FB(Chip8 *chip8);
 void superchip_00FC(Chip8 *chip8);
+void superchip_FX30(Chip8 *chip8,uint8_t x);
+void superchip_FX75(Chip8 *chip8,uint8_t x);
+void superchip_FX85(Chip8 *chip8,uint8_t x);

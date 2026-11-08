@@ -31,5 +31,8 @@ typedef struct
     uint16_t opcode;
     int draw_flag;
     int high_res;
-    uint8_t rpl[8];
+    uint8_t rpl_flags[8];
 } Chip8;
+
+void save_rpl(Chip8 *chip8);
+void load_rpl(Chip8 *chip8);
