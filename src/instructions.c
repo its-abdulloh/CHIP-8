@@ -294,3 +294,40 @@ void superchip_00FE(Chip8 *chip8){
     chip8->high_res = 0;
     memset(chip8->video, 0, sizeof(chip8->video));
 }
+
+void superchip_00CN(Chip8 *chip8, uint8_t n){
+    for (int i = WIDTH*HEIGHT-1;i>=n*WIDTH;i--){
+        chip8->video[i] = chip8->video[i-n*WIDTH];
+    }
+    for (int i=0;i<n*WIDTH;i++){
+        chip8->video[i] = 0;
+    }
+}
+
+void superchip_00FB(Chip8 *chip8){
+    for (int y=HEIGHT-1; y>=0; y--) {
+        for (int x=WIDTH-1; x>=4; x--) {
+            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x-4];
+        }
+    }
+
+    for (int y=0; y<HEIGHT; y++) {
+        for (int x=0; x<4; x++) {
+            chip8->video[y*WIDTH+x] = 0;
+        }
+    }
+}
+
+void superchip_00FC(Chip8 *chip8){
+    for (int y=0; y<HEIGHT; y++) {
+        for (int x=0; x<WIDTH-4; x++) {
+            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x+4];
+        }
+    }
+
+    for (int y=0; y<HEIGHT; y++) {
+        for (int x=WIDTH-4; x<WIDTH; x++) {
+            chip8->video[y*WIDTH+x] = 0;
+        }
+    }
+}

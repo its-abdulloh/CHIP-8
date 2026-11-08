@@ -6,3 +6,4 @@
 
 extern uint8_t fontset[FONTSET_SIZE];
 
+extern uint8_t big_fontset[16 * 10];

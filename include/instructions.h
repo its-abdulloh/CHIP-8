@@ -43,3 +43,6 @@ void chip8_DXYN(Chip8 *chip8,uint8_t x,uint8_t y,uint8_t n);
 //SUPERCHIP instructions
 void superchip_00FF(Chip8 *chip8);
 void superchip_00FE(Chip8 *chip8);
+void superchip_00CN(Chip8 *chip8, uint8_t n);
+void superchip_00FB(Chip8 *chip8);
+void superchip_00FC(Chip8 *chip8);
