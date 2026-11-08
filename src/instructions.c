@@ -307,31 +307,37 @@ void superchip_00CN(Chip8 *chip8, uint8_t n){
 }
 
 void superchip_00FB(Chip8 *chip8){
+    int scroll = chip8->high_res ? 4 : 8;
     for (int y=HEIGHT-1; y>=0; y--) {
-        for (int x=WIDTH-1; x>=4; x--) {
-            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x-4];
+        for (int x=WIDTH-1; x>=scroll; x--) {
+            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x-scroll];
         }
     }
 
     for (int y=0; y<HEIGHT; y++) {
-        for (int x=0; x<4; x++) {
+        for (int x=0; x<scroll; x++) {
             chip8->video[y*WIDTH+x] = 0;
         }
     }
+
+    chip8->draw_flag = 1;
 }
 
 void superchip_00FC(Chip8 *chip8){
+    int scroll = chip8->high_res ? 4 : 8;
     for (int y=0; y<HEIGHT; y++) {
-        for (int x=0; x<WIDTH-4; x++) {
-            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x+4];
+        for (int x=0; x<WIDTH-scroll; x++) {
+            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x+scroll];
         }
     }
 
     for (int y=0; y<HEIGHT; y++) {
-        for (int x=WIDTH-4; x<WIDTH; x++) {
+        for (int x=WIDTH-scroll; x<WIDTH; x++) {
             chip8->video[y*WIDTH+x] = 0;
         }
     }
+
+    chip8->draw_flag = 1;
 }
 
 void superchip_FX30(Chip8 *chip8, uint8_t x){
