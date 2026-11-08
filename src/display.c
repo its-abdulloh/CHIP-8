@@ -7,9 +7,9 @@
 SDL_Window* window;
 SDL_Renderer* renderer;
 
-const int WIDTH = 64;
-const int HEIGHT = 32;
-const int SCALE = 10;
+const int WIDTH = 128;
+const int HEIGHT = 64;
+const int SCALE = 5;
 
 int display_init(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);

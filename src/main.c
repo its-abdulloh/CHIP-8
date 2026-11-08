@@ -138,6 +138,21 @@ void decode_exec(){
         else if (kk==0xEE) {
             chip8_00EE(&chip8);
         }
+        else if (kk==0xFF) {
+            superchip_00FF(&chip8);
+        }
+        else if (kk==0xFE) {
+            superchip_00FE(&chip8);
+        }
+        else if (kk==0xFB) {
+            superchip_00FB(&chip8);
+        }
+        else if (kk==0xFC) {
+            superchip_00FC(&chip8);
+        }
+        else if ((chip8.opcode & 0xFFF0) == 0x00C0) {
+            superchip_00CN(&chip8, n);
+        }
         break;
         case 1:
         chip8_1NNN(&chip8, nnn);
@@ -233,6 +248,9 @@ void decode_exec(){
             case 0x29:
             chip8_FX29(&chip8, x);
             break;
+            case 0x30:
+            superchip_FX30(&chip8, x);
+            break;
             case 0x33:
             chip8_FX33(&chip8, x);
             break;
@@ -241,6 +259,12 @@ void decode_exec(){
             break;
             case 0x65:
             chip8_FX65(&chip8, x);
+            break;
+            case 0x75:
+            superchip_FX75(&chip8, x);
+            break;
+            case 0x85:
+            superchip_FX85(&chip8, x);
             break;
         }
         break;
@@ -252,7 +276,7 @@ int main(int argc, char *argv[]){
         printf("Usage: ./chip8 rom_name\n");
         return 1;
     }
-    char *rom_name = argv[2];
+    char *rom_name = argv[1];
 
     initialize();
     if (!LoadROM(rom_name)) {
