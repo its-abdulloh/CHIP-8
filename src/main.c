@@ -21,7 +21,7 @@ uint16_t wrong_opcode=0;
 
 Chip8 chip8;
 
-const double instructionTime = 1.0 / 500.0;
+const double instructionTime = 1.0 / 700.0;
 const double timerInterval = 1.0/ 60.0;
 double accumulator = 0.0;
 double timerAccumulator = 0.0;
