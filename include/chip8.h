@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define MEMORY_SIZE 4096
+#define MEMORY_SIZE 65536
 #define WIDTH 128
 #define HEIGHT 64
 
@@ -31,7 +31,7 @@ typedef struct
     uint16_t opcode;
     int draw_flag;
     int high_res;
-    uint8_t rpl_flags[8];
+    uint8_t rpl_flags[16];
 } Chip8;
 
 void save_rpl(Chip8 *chip8);

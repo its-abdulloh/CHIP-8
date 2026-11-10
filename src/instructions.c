@@ -356,3 +356,16 @@ void superchip_FX85(Chip8 *chip8, uint8_t x){
         chip8->V[i] = chip8->rpl_flags[i];
     }
 }
+
+//XO-CHIP instructions
+void xochip_5XY2(Chip8 *chip8, uint8_t x, uint8_t y){
+    for (int i=x;i<=y;i++){
+        chip8->memory[chip8->I+(i-x)] = chip8->V[i];
+    }
+}
+
+void xochip_5XY3(Chip8 *chip8, uint8_t x, uint8_t y){
+    for(int i=x;i<=y;i++){
+        chip8->V[i] = chip8->memory[chip8->I+(i-x)];
+    }
+}
