@@ -5,3 +5,5 @@
  What i made is actually one of those interpreters.
 
  Also added SCHIP(SUPERCHIP) support, SCHIP is just an extension of CHIP-8 that expands the resolution of the display to 128x64 adds bigger fonts and scrolling.
+
+ XO_CHIP support added as well, which expands memeory to 64kb and adds new instructions and colors and better audio

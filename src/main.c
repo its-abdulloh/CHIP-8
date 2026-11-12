@@ -229,43 +229,50 @@ void decode_exec(){
         }
         break;
         case 0xF:
-        switch (kk) {
-            case 0x07:
-            chip8_FX07(&chip8, x);
-            break;
-            case 0x0A:
-            chip8_FX0A(&chip8, x);
-            break;
-            case 0x15:
-            chip8_FX15(&chip8, x);
-            break;
-            case 0x18:
-            chip8_FX18(&chip8, x);
-            break;
-            case 0x1E:
-            chip8_FX1E(&chip8, x);
-            break;
-            case 0x29:
-            chip8_FX29(&chip8, x);
-            break;
-            case 0x30:
-            superchip_FX30(&chip8, x);
-            break;
-            case 0x33:
-            chip8_FX33(&chip8, x);
-            break;
-            case 0x55:
-            chip8_FX55(&chip8, x);
-            break;
-            case 0x65:
-            chip8_FX65(&chip8, x);
-            break;
-            case 0x75:
-            superchip_FX75(&chip8, x);
-            break;
-            case 0x85:
-            superchip_FX85(&chip8, x);
-            break;
+        if (nnn==0x000){
+            uint16_t nnnn = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
+            chip8.pc+=2;
+            xochip_F000_NNNN(&chip8, nnnn);
+        }
+        else {
+            switch (kk) {
+                case 0x07:
+                chip8_FX07(&chip8, x);
+                break;
+                case 0x0A:
+                chip8_FX0A(&chip8, x);
+                break;
+                case 0x15:
+                chip8_FX15(&chip8, x);
+                break;
+                case 0x18:
+                chip8_FX18(&chip8, x);
+                break;
+                case 0x1E:
+                chip8_FX1E(&chip8, x);
+                break;
+                case 0x29:
+                chip8_FX29(&chip8, x);
+                break;
+                case 0x30:
+                superchip_FX30(&chip8, x);
+                break;
+                case 0x33:
+                chip8_FX33(&chip8, x);
+                break;
+                case 0x55:
+                chip8_FX55(&chip8, x);
+                break;
+                case 0x65:
+                chip8_FX65(&chip8, x);
+                break;
+                case 0x75:
+                superchip_FX75(&chip8, x);
+                break;
+                case 0x85:
+                superchip_FX85(&chip8, x);
+                break;
+            }
         }
         break;
     }
@@ -339,3 +346,27 @@ int main(int argc, char *argv[]){
     display_quit();
     return EXIT_SUCCESS;
 }
+
+// Memory: Expand from 4 KB to 64 KB. done
+
+// Addressing: Make sure I and PC support 16-bit addresses. done
+
+// Instruction fetching: Support 4-byte instructions (F000 NNNN).done
+
+// Graphics: Replace your single framebuffer with two independent bitplanes.
+
+// Colors: Composite the two planes into four possible colors.
+
+// Plane selection: Implement FN01.
+
+// Drawing: Update DXYN to draw on selected planes.
+
+// Scrolling: Add 00DN (scroll up) and make scrolling plane-aware.
+
+// Register ranges: Implement 5XY2 and 5XY3.
+
+// RPL flags: Expand from 8 to 16. done
+
+// Audio: Implement F002 and FX3A.
+
+// Resolution changes: Implement XO-CHIP's display-clearing behavior.

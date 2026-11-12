@@ -369,3 +369,8 @@ void xochip_5XY3(Chip8 *chip8, uint8_t x, uint8_t y){
         chip8->V[i] = chip8->memory[chip8->I+(i-x)];
     }
 }
+
+void xochip_F000_NNNN(Chip8 *chip8, uint16_t nnnn){
+    chip8->I = nnnn;
+}
+

@@ -53,3 +53,4 @@ void superchip_FX85(Chip8 *chip8,uint8_t x);
 //XO-CHIP instructions
 void xochip_5XY2(Chip8 *chip8,uint8_t x, uint8_t y);
 void xochip_5XY3(Chip8 *chip8,uint8_t x, uint8_t y);
+void xochip_F000_NNNN(Chip8 *chip8,uint16_t nnnn);
