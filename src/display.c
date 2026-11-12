@@ -1,5 +1,6 @@
 #include "../include/display.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -10,6 +11,13 @@ SDL_Renderer* renderer;
 const int WIDTH = 128;
 const int HEIGHT = 64;
 const int SCALE = 5;
+
+SDL_Color color_pallate[] = {
+    {  0,   0,   0, 255 }, // Level 0: Black
+    { 85,  85,  85, 255 }, // Level 1: Dark Gray
+    {170, 170, 170, 255 }, // Level 2: Light Gray
+    {255, 255, 255, 255 }  // Level 3: White
+};
 
 int display_init(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -33,20 +41,22 @@ int display_init(){
     return 0;
 }
 
-void draw(uint32_t video[]) {
+void draw(uint8_t video[],uint8_t video1[]) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     for (int y=0;y<HEIGHT;y++){
         for (int x =0; x<WIDTH; x++) {
             int index = y*WIDTH+x;
-
-            if (video[index]==1) {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            }
-            else {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            }
+            
+            int color_i = (video[index] << 1) | video1[index];
+            SDL_SetRenderDrawColor(
+                renderer,
+                color_pallate[color_i].r,
+                color_pallate[color_i].g,
+                color_pallate[color_i].b,
+                255
+            );
 
             SDL_Rect rect = {
                 x*SCALE,

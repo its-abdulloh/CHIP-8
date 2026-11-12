@@ -58,6 +58,7 @@ int map_key(SDL_Keycode key)
 
 void initialize(){
     chip8 = (Chip8){0};
+    chip8.plane = 0;
     srand((unsigned int)time(NULL));
 
     for (unsigned int i=0;i<FONTSET_SIZE;i++){
@@ -337,7 +338,7 @@ int main(int argc, char *argv[]){
         }
 
         if (chip8.draw_flag){
-            draw(chip8.video);
+            draw(chip8.video,chip8.video1);
             chip8.draw_flag = 0;
         }
 
@@ -353,7 +354,7 @@ int main(int argc, char *argv[]){
 
 // Instruction fetching: Support 4-byte instructions (F000 NNNN).done
 
-// Graphics: Replace your single framebuffer with two independent bitplanes.
+// Graphics: Replace your single framebuffer with two independent bitplanes. done
 
 // Colors: Composite the two planes into four possible colors.
 

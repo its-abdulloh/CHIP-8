@@ -26,12 +26,14 @@ typedef struct
     //keypad
     uint8_t keypad[16];
     //graphics
-    uint32_t video[WIDTH*HEIGHT];
+    uint8_t video[WIDTH*HEIGHT];
+    uint8_t video1[WIDTH*HEIGHT];
     //operation code
     uint16_t opcode;
     int draw_flag;
     int high_res;
     uint8_t rpl_flags[16];
+    int plane;
 } Chip8;
 
 void save_rpl(Chip8 *chip8);
