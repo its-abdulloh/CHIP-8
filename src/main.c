@@ -365,26 +365,8 @@ int main(int argc, char *argv[]){
     return EXIT_SUCCESS;
 }
 
-// Memory: Expand from 4 KB to 64 KB. done
-
-// Addressing: Make sure I and PC support 16-bit addresses. done
-
-// Instruction fetching: Support 4-byte instructions (F000 NNNN).done
-
-// Graphics: Replace your single framebuffer with two independent bitplanes. done
-
-// Colors: Composite the two planes into four possible colors.done
-
-// Plane selection: Implement FN01. done
-
 // Drawing: Update DXYN to draw on selected planes.
 
 // Scrolling: Add 00DN (scroll up) and make scrolling plane-aware.
-
-// Register ranges: Implement 5XY2 and 5XY3. done
-
-// RPL flags: Expand from 8 to 16. done
-
-// Audio: Implement F002 and FX3A. done
 
 // Resolution changes: Implement XO-CHIP's display-clearing behavior.
