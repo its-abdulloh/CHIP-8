@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define MEMORY_SIZE 65536
+#define MEMORY_SIZE 64*1024
 #define WIDTH 128
 #define HEIGHT 64
 
@@ -26,8 +26,7 @@ typedef struct
     //keypad
     uint8_t keypad[16];
     //graphics
-    uint8_t video[WIDTH*HEIGHT];
-    uint8_t video1[WIDTH*HEIGHT];
+    uint8_t video[2][WIDTH*HEIGHT];
     //operation code
     uint16_t opcode;
     int draw_flag;

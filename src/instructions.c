@@ -213,7 +213,7 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     for (int row=0;row<height;row++){
         uint16_t sprite;
         if (width == 16) {
-            sprite = (chip8->memory[chip8->I + row * 2] << 8) |
+            sprite = ((uint16_t)chip8->memory[chip8->I + row * 2] << 8) |
                       chip8->memory[chip8->I + row * 2 + 1];
         } else {
             sprite = chip8->memory[chip8->I + row];
@@ -223,30 +223,37 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
             int pixel = (sprite >> (width - 1 - bit)) & 1;
 
             if (pixel == 1) {
-                int index;
-                if(chip8->high_res==0){
-                    int px = ((x_cord + bit) % 64)*2;
-                    int py = ((y_cord + row) % 32)*2;
-                    index = py * 128 + px;
-                    if (chip8->video[index] == 1 ||
-                        chip8->video[index + 1] == 1 ||
-                        chip8->video[index + 128] == 1 ||
-                        chip8->video[index + 129] == 1) {
-                        chip8->V[0xF] = 1;
+                for (int plane = 0; plane < 2; plane++)
+                {
+                    if (!(chip8->plane & (1 << plane)))
+                        continue;
+
+                    // Draw to selected bitplane
+                    int index;
+                    if(chip8->high_res==0){
+                        int px = ((x_cord + bit) % 64)*2;
+                        int py = ((y_cord + row) % 32)*2;
+                        index = py * 128 + px;
+                        if (chip8->video[plane][index] == 1 ||
+                            chip8->video[plane][index + 1] == 1 ||
+                            chip8->video[plane][index + 128] == 1 ||
+                            chip8->video[plane][index + 129] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[plane][index]^=1;
+                        chip8->video[plane][index+1]^=1;
+                        chip8->video[plane][index+128]^=1;
+                        chip8->video[plane][index+129]^=1;
                     }
-                    chip8->video[index]^=1;
-                    chip8->video[index+1]^=1;
-                    chip8->video[index+128]^=1;
-                    chip8->video[index+129]^=1;
-                }
-                else if (chip8->high_res==1) {
-                    int px = (x_cord + bit) % 128;
-                    int py = (y_cord + row) % 64;
-                    index = py * 128 + px;
-                    if (chip8->video[index] == 1) {
-                        chip8->V[0xF] = 1;
+                    else if (chip8->high_res==1) {
+                        int px = (x_cord + bit) % 128;
+                        int py = (y_cord + row) % 64;
+                        index = py * 128 + px;
+                        if (chip8->video[plane][index] == 1) {
+                            chip8->V[0xF] = 1;
+                        }
+                        chip8->video[plane][index] ^= 1;
                     }
-                    chip8->video[index] ^= 1;
                 }
             }
         }
@@ -267,45 +274,59 @@ void superchip_00FE(Chip8 *chip8){
 }
 
 void superchip_00CN(Chip8 *chip8, uint8_t n){
-    for (int i = WIDTH*HEIGHT-1;i>=n*WIDTH;i--){
-        chip8->video[i] = chip8->video[i-n*WIDTH];
+    for (int plane = 0; plane < 2; plane++)
+    {
+        if (!(chip8->plane & (1 << plane)))
+            continue;
+        for (int i = WIDTH*HEIGHT-1;i>=n*WIDTH;i--){
+            chip8->video[plane][i] = chip8->video[plane][i-n*WIDTH];
+        }
+        for (int i=0;i<n*WIDTH;i++){
+            chip8->video[plane][i] = 0;
+        }
     }
-    for (int i=0;i<n*WIDTH;i++){
-        chip8->video[i] = 0;
-    }
+    chip8->draw_flag = 1;
 }
 
 void superchip_00FB(Chip8 *chip8){
     int scroll = chip8->high_res ? 4 : 8;
-    for (int y=HEIGHT-1; y>=0; y--) {
-        for (int x=WIDTH-1; x>=scroll; x--) {
-            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x-scroll];
+    for (int plane = 0; plane < 2; plane++)
+    {
+        if (!(chip8->plane & (1 << plane)))
+            continue;
+        for (int y=HEIGHT-1; y>=0; y--) {
+            for (int x=WIDTH-1; x>=scroll; x--) {
+                chip8->video[plane][y*WIDTH+x] = chip8->video[plane][y*WIDTH+x-scroll];
+            }
+        }
+
+        for (int y=0; y<HEIGHT; y++) {
+            for (int x=0; x<scroll; x++) {
+                chip8->video[plane][y*WIDTH+x] = 0;
+            }
         }
     }
-
-    for (int y=0; y<HEIGHT; y++) {
-        for (int x=0; x<scroll; x++) {
-            chip8->video[y*WIDTH+x] = 0;
-        }
-    }
-
     chip8->draw_flag = 1;
 }
 
 void superchip_00FC(Chip8 *chip8){
     int scroll = chip8->high_res ? 4 : 8;
-    for (int y=0; y<HEIGHT; y++) {
-        for (int x=0; x<WIDTH-scroll; x++) {
-            chip8->video[y*WIDTH+x] = chip8->video[y*WIDTH+x+scroll];
+    for (int plane = 0; plane < 2; plane++)
+    {
+        if (!(chip8->plane & (1 << plane)))
+            continue;
+        for (int y=0; y<HEIGHT; y++) {
+            for (int x=0; x<WIDTH-scroll; x++) {
+                chip8->video[plane][y*WIDTH+x] = chip8->video[plane][y*WIDTH+x+scroll];
+            }
+        }
+
+        for (int y=0; y<HEIGHT; y++) {
+            for (int x=WIDTH-scroll; x<WIDTH; x++) {
+                chip8->video[plane][y*WIDTH+x] = 0;
+            }
         }
     }
-
-    for (int y=0; y<HEIGHT; y++) {
-        for (int x=WIDTH-scroll; x<WIDTH; x++) {
-            chip8->video[y*WIDTH+x] = 0;
-        }
-    }
-
     chip8->draw_flag = 1;
 }
 

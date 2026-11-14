@@ -355,7 +355,7 @@ int main(int argc, char *argv[]){
         }
 
         if (chip8.draw_flag){
-            draw(chip8.video,chip8.video1);
+            draw(chip8.video[0],chip8.video[1]);
             chip8.draw_flag = 0;
         }
 
@@ -365,8 +365,4 @@ int main(int argc, char *argv[]){
     return EXIT_SUCCESS;
 }
 
-// Drawing: Update DXYN to draw on selected planes.
-
-// Scrolling: Add 00DN (scroll up) and make scrolling plane-aware.
-
-// Resolution changes: Implement XO-CHIP's display-clearing behavior.
+// Scrolling: Add 00DN
