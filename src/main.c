@@ -154,6 +154,9 @@ void decode_exec(){
         else if ((chip8.opcode & 0xFFF0) == 0x00C0) {
             superchip_00CN(&chip8, n);
         }
+        else if ((chip8.opcode & 0xFFF0) == 0x00D0) {
+            xochip_00DN(&chip8, n);
+        }
         break;
         case 1:
         chip8_1NNN(&chip8, nnn);
@@ -365,4 +368,3 @@ int main(int argc, char *argv[]){
     return EXIT_SUCCESS;
 }
 
-// Scrolling: Add 00DN

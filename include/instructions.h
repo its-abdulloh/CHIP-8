@@ -57,3 +57,4 @@ void xochip_F000_NNNN(Chip8 *chip8,uint16_t nnnn);
 void xochip_FN01(Chip8 *chip8,uint8_t N);
 void xochip_F002(Chip8 *chip8);
 void xochip_FX3A(Chip8 *chip8,uint8_t x);
+void xochip_00DN(Chip8 *chip8,uint8_t n);
