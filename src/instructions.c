@@ -374,3 +374,17 @@ void xochip_F000_NNNN(Chip8 *chip8, uint16_t nnnn){
     chip8->I = nnnn;
 }
 
+void xochip_FN01(Chip8 *chip8, uint8_t N){
+    chip8->plane = N;
+}
+
+void xochip_F002(Chip8 *chip8){
+    for (int i=0; i<16;i++) {
+        chip8->audio_buffer[i] = chip8->memory[chip8->I+i];
+    }
+}
+
+void xochip_FX3A(Chip8 *chip8, uint8_t x){
+    chip8->pitch = chip8->V[x];
+}
+

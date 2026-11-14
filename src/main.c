@@ -169,6 +169,12 @@ void decode_exec(){
         break;
         case 5:
         chip8_5XY0(&chip8, x, y);
+        if (n == 2){
+            xochip_5XY2(&chip8, x, y);
+        }
+        else if (n == 3) {
+            xochip_5XY3(&chip8, x, y);
+        }
         break;
         case 6:
         chip8_6XKK(&chip8, x, kk);
@@ -235,8 +241,15 @@ void decode_exec(){
             chip8.pc+=2;
             xochip_F000_NNNN(&chip8, nnnn);
         }
+        else if (nnn == 0x002) {
+            xochip_F002(&chip8);
+            sound_load_buffer(chip8.audio_buffer);
+        }
         else {
             switch (kk) {
+                case 0x01:
+                xochip_FN01(&chip8, x);
+                break;
                 case 0x07:
                 chip8_FX07(&chip8, x);
                 break;
@@ -260,6 +273,10 @@ void decode_exec(){
                 break;
                 case 0x33:
                 chip8_FX33(&chip8, x);
+                break;
+                case 0x3A:
+                xochip_FX3A(&chip8, x);
+                sound_set_pitch(chip8.pitch);
                 break;
                 case 0x55:
                 chip8_FX55(&chip8, x);
@@ -356,18 +373,18 @@ int main(int argc, char *argv[]){
 
 // Graphics: Replace your single framebuffer with two independent bitplanes. done
 
-// Colors: Composite the two planes into four possible colors.
+// Colors: Composite the two planes into four possible colors.done
 
-// Plane selection: Implement FN01.
+// Plane selection: Implement FN01. done
 
 // Drawing: Update DXYN to draw on selected planes.
 
 // Scrolling: Add 00DN (scroll up) and make scrolling plane-aware.
 
-// Register ranges: Implement 5XY2 and 5XY3.
+// Register ranges: Implement 5XY2 and 5XY3. done
 
 // RPL flags: Expand from 8 to 16. done
 
-// Audio: Implement F002 and FX3A.
+// Audio: Implement F002 and FX3A. done
 
 // Resolution changes: Implement XO-CHIP's display-clearing behavior.

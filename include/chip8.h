@@ -34,6 +34,9 @@ typedef struct
     int high_res;
     uint8_t rpl_flags[16];
     int plane;
+    //audio buffer
+    uint8_t audio_buffer[16];
+    uint8_t pitch;
 } Chip8;
 
 void save_rpl(Chip8 *chip8);

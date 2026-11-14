@@ -11,4 +11,6 @@
 void audio_callback(void *userdata, Uint8 *stream, int len);
 int sound_init();
 void sound_set_enabled(int enabled);
+void sound_load_buffer(const uint8_t *buffer);
+void sound_set_pitch(uint8_t pitch);
 
