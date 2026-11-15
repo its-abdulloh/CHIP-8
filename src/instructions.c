@@ -10,7 +10,11 @@ uint8_t randomByte(){
 }
 
 void chip8_00E0(Chip8 *chip8){
-    memset(chip8->video, 0, sizeof(chip8->video));
+    for (int plane=0; plane<2; plane++) {
+        if (!(chip8->plane & (1<<plane)))
+            continue;
+        memset(chip8->video[plane], 0, sizeof(chip8->video[plane]));
+    }
 }
 
 void chip8_00EE(Chip8 *chip8){

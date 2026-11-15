@@ -13,10 +13,10 @@ const int HEIGHT = 64;
 const int SCALE = 5;
 
 SDL_Color color_pallate[] = {
-    {  0,   0,   0, 255 }, // Level 0: Black
+    {  255,   255,   255, 255 }, // Level 0: White
     { 85,  85,  85, 255 }, // Level 1: Dark Gray
     {170, 170, 170, 255 }, // Level 2: Light Gray
-    {255, 255, 255, 255 }  // Level 3: White
+    {0, 0, 0, 255 }  // Level 3: Black
 };
 
 int display_init(){
