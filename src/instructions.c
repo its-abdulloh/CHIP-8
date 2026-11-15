@@ -265,12 +265,14 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
 
 void superchip_00FF(Chip8 *chip8){
     chip8->high_res = 1;
-    memset(chip8->video, 0, sizeof(chip8->video));   
+    memset(chip8->video, 0, sizeof(chip8->video));
+    chip8->draw_flag = 1;   
 }
 
 void superchip_00FE(Chip8 *chip8){
     chip8->high_res = 0;
     memset(chip8->video, 0, sizeof(chip8->video));
+    chip8->draw_flag = 1;
 }
 
 void superchip_00CN(Chip8 *chip8, uint8_t n){
@@ -380,11 +382,11 @@ void xochip_FX3A(Chip8 *chip8, uint8_t x){
 
 void xochip_00DN(Chip8 *chip8, uint8_t n){
     for (int plane=0; plane<2; plane++) {
-        if (n >= HEIGHT) {
-            memset(chip8->video[plane], 0, WIDTH * HEIGHT);
+        if (!(chip8->plane & (1<<plane))) {
             continue;
         }
-        if (!(chip8->plane & (1<<plane))) {
+        if (n >= HEIGHT) {
+            memset(chip8->video[plane], 0, WIDTH * HEIGHT);
             continue;
         }
         for (int i=n*WIDTH; i<HEIGHT*WIDTH; i++) {

@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude $(shell sdl2-config --cflags)
-LDFLAGS = $(shell sdl2-config --libs)
+LDFLAGS = $(shell sdl2-config --libs) -lm
 
 SRC = $(wildcard src/*.c)
 TARGET = chip8

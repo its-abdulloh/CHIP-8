@@ -7,6 +7,7 @@
 
 static SDL_AudioDeviceID device;
 static int beep_enabled = 0;
+static int xo_audio_enabled = 0;
 static double phase = 0.0;
 static uint8_t audio_buffer[16] = {0};
 static int pattern_loaded = 0;
@@ -19,10 +20,10 @@ void audio_callback(void *userdata, Uint8 *stream, int len)
 
     float *samples = (float *)stream;
     int count = len / sizeof(float);
-    double frequency = 4000.0 * pow(2.0, (audio_pitch - 64) / 48.0);
+    double frequency = 4000.0 * pow(2.0, ((int)audio_pitch - 64) / 48.0);
 
     for (int i = 0; i < count; i++) {
-        if (pattern_loaded) {
+        if (pattern_loaded && xo_audio_enabled) {
             int byte_index = (int)audio_position / 8;
             int bit_position = 7 - ((int)audio_position % 8);
 
@@ -30,7 +31,7 @@ void audio_callback(void *userdata, Uint8 *stream, int len)
 
             samples[i] = bit ? 0.2f : -0.2f;
 
-            audio_position += frequency * 128.0 / 4000.0 / 44100.0 * 4000.0;
+            audio_position += frequency / 44100.0;
             if (audio_position >= 128.0)
                 audio_position -= 128.0;
         }else {
@@ -93,5 +94,12 @@ void sound_set_pitch(uint8_t pitch)
 
     audio_pitch = pitch;
 
+    SDL_UnlockAudioDevice(device);
+}
+
+void sound_set_xo_enabled(int enabled)
+{
+    SDL_LockAudioDevice(device);
+    xo_audio_enabled = enabled;
     SDL_UnlockAudioDevice(device);
 }

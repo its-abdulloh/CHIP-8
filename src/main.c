@@ -21,7 +21,7 @@ uint16_t wrong_opcode=0;
 
 Chip8 chip8;
 
-const double instructionTime = 1.0 / 700.0;
+const double instructionTime = 1.0 / 60000.0;
 const double timerInterval = 1.0/ 60.0;
 double accumulator = 0.0;
 double timerAccumulator = 0.0;
@@ -58,7 +58,7 @@ int map_key(SDL_Keycode key)
 
 void initialize(){
     chip8 = (Chip8){0};
-    chip8.plane = 0;
+    chip8.plane = 1;
     srand((unsigned int)time(NULL));
 
     for (unsigned int i=0;i<FONTSET_SIZE;i++){
@@ -171,8 +171,10 @@ void decode_exec(){
         chip8_4XKK(&chip8, x, kk);
         break;
         case 5:
-        chip8_5XY0(&chip8, x, y);
-        if (n == 2){
+        if(n==0){
+            chip8_5XY0(&chip8, x, y);
+        }
+        else if (n == 2){
             xochip_5XY2(&chip8, x, y);
         }
         else if (n == 3) {
@@ -335,6 +337,7 @@ int main(int argc, char *argv[]){
             if (chip8.soundTimer>0)
                 chip8.soundTimer--;
             sound_set_enabled(chip8.soundTimer > 0);
+            sound_set_xo_enabled(chip8.soundTimer > 0);
             timerAccumulator -= timerInterval;
         }
         
