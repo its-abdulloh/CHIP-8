@@ -214,24 +214,29 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->V[0xF]=0;
     int width = (n == 0) ? 16 : 8;
     int height = (n == 0) ? 16 : n;
-    for (int row=0;row<height;row++){
-        uint16_t sprite;
-        if (width == 16) {
-            sprite = ((uint16_t)chip8->memory[chip8->I + row * 2] << 8) |
-                      chip8->memory[chip8->I + row * 2 + 1];
-        } else {
-            sprite = chip8->memory[chip8->I + row];
-        }
+    for (int plane = 0; plane < 2; plane++)
+    {
+        if (!(chip8->plane & (1 << plane)))
+            continue;
 
-        for (int bit=0;bit<width;bit++){
-            int pixel = (sprite >> (width - 1 - bit)) & 1;
+        int plane_offset = 0;
 
-            if (pixel == 1) {
-                for (int plane = 0; plane < 2; plane++)
-                {
-                    if (!(chip8->plane & (1 << plane)))
-                        continue;
+        if (chip8->plane == 3 && plane == 1)
+            plane_offset = height * (width / 8);
 
+        for (int row=0;row<height;row++){
+            uint16_t sprite;
+            if (width == 16) {
+                sprite = ((uint16_t)chip8->memory[chip8->I + plane_offset + row * 2] << 8) |
+                        chip8->memory[chip8->I + plane_offset + row * 2 + 1];
+            } else {
+                sprite = chip8->memory[chip8->I + plane_offset + row];
+            }
+
+            for (int bit=0;bit<width;bit++){
+                int pixel = (sprite >> (width - 1 - bit)) & 1;
+
+                if (pixel == 1) {
                     // Draw to selected bitplane
                     int index;
                     if(chip8->high_res==0){
@@ -385,6 +390,7 @@ void xochip_FX3A(Chip8 *chip8, uint8_t x){
 }
 
 void xochip_00DN(Chip8 *chip8, uint8_t n){
+    n = (chip8->high_res) ? n : n*2;
     for (int plane=0; plane<2; plane++) {
         if (!(chip8->plane & (1<<plane))) {
             continue;
