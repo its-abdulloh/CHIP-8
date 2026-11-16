@@ -4,9 +4,12 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <stdlib.h>
 
 SDL_Window* window;
 SDL_Renderer* renderer;
+SDL_Texture* texture;
+SDL_PixelFormat *pixelFormat;
 
 const int WIDTH = 128;
 const int HEIGHT = 64;
@@ -18,6 +21,8 @@ SDL_Color color_pallate[] = {
     {170, 170, 170, 255 }, // Level 2: Light Gray
     {0, 0, 0, 255 }  // Level 3: Black
 };
+
+static uint32_t *pixels = NULL;
 
 int display_init(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -37,42 +42,40 @@ int display_init(){
     );
 
     if (!renderer) return -1;
+    
+    texture = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        WIDTH,
+        HEIGHT
+    );
+
+    pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    pixels = malloc(WIDTH * HEIGHT * sizeof(uint32_t));
 
     return 0;
 }
 
-void draw(uint8_t video[],uint8_t video1[]) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+void draw(uint8_t video[], uint8_t video1[]) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        int color_i = video[i] | (video1[i] << 1);
+        SDL_Color c = color_pallate[color_i];
 
-    for (int y=0;y<HEIGHT;y++){
-        for (int x =0; x<WIDTH; x++) {
-            int index = y*WIDTH+x;
-            
-            int color_i = video[index] | (video1[index] << 1);
-            SDL_SetRenderDrawColor(
-                renderer,
-                color_pallate[color_i].r,
-                color_pallate[color_i].g,
-                color_pallate[color_i].b,
-                255
-            );
-
-            SDL_Rect rect = {
-                x*SCALE,
-                y*SCALE,
-                SCALE,
-                SCALE
-            };
-
-            SDL_RenderFillRect(renderer, &rect);
-        }
+        pixels[i] = SDL_MapRGBA(
+            pixelFormat, c.r, c.g, c.b, 255
+        );
     }
 
+    SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(uint32_t));
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 }
 
 void display_quit(){
+    SDL_FreeFormat(pixelFormat);
+    free(pixels);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

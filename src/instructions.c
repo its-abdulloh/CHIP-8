@@ -15,6 +15,7 @@ void chip8_00E0(Chip8 *chip8){
             continue;
         memset(chip8->video[plane], 0, sizeof(chip8->video[plane]));
     }
+    chip8->draw_flag = 1;
 }
 
 void chip8_00EE(Chip8 *chip8){
