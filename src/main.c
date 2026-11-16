@@ -23,11 +23,10 @@ Chip8 chip8;
 
 const double instructionTime = 1.0 / 10000.0;
 const double timerInterval = 1.0/ 60.0;
+const double vblankInterval = 1.0 / 60.0;
+double vblankAccumulator = 0;
 double accumulator = 0.0;
 double timerAccumulator = 0.0;
-
-
-
 
 int map_key(SDL_Keycode key)
 {
@@ -323,6 +322,12 @@ int main(int argc, char *argv[]){
         start = now;
         accumulator += deltaTime;
         timerAccumulator += deltaTime;
+        vblankAccumulator += deltaTime;
+
+        if (vblankAccumulator >= vblankInterval) {
+            vblankAccumulator -= vblankInterval;
+            chip8.vblank = 1;
+        }
         
 
         while (accumulator >= instructionTime){

@@ -49,7 +49,7 @@ void draw(uint8_t video[],uint8_t video1[]) {
         for (int x =0; x<WIDTH; x++) {
             int index = y*WIDTH+x;
             
-            int color_i = (video[index] << 1) | video1[index];
+            int color_i = video[index] | (video1[index] << 1);
             SDL_SetRenderDrawColor(
                 renderer,
                 color_pallate[color_i].r,

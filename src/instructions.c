@@ -214,6 +214,12 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     chip8->V[0xF]=0;
     int width = (n == 0) ? 16 : 8;
     int height = (n == 0) ? 16 : n;
+    
+    if (!chip8->vblank) {
+        chip8->pc-=2;
+        return;
+    }
+
     for (int plane = 0; plane < 2; plane++)
     {
         if (!(chip8->plane & (1 << plane)))
@@ -267,6 +273,7 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
             }
         }
     }
+    chip8->vblank = 0;
     chip8->draw_flag = 1;
 }
 
