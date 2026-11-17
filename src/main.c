@@ -323,24 +323,7 @@ int main(int argc, char *argv[]){
         accumulator += deltaTime;
         timerAccumulator += deltaTime;
         frameAccumulator += deltaTime;
-        
 
-        while (accumulator >= instructionTime){
-            fetch();
-            decode_exec();
-            accumulator -= instructionTime;
-        }
-
-        while (timerAccumulator >= timerInterval){
-            if (chip8.delayTimer>0)
-                chip8.delayTimer--;
-            if (chip8.soundTimer>0)
-                chip8.soundTimer--;
-            sound_set_enabled(chip8.soundTimer > 0);
-            sound_set_xo_enabled(chip8.soundTimer > 0);
-            timerAccumulator -= timerInterval;
-        }
-        
         //handle keys
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -358,6 +341,22 @@ int main(int argc, char *argv[]){
                 if (key!=-1)
                     chip8.keypad[key]=0;
             }
+        }
+
+        while (accumulator >= instructionTime){
+            fetch();
+            decode_exec();
+            accumulator -= instructionTime;
+        }
+
+        while (timerAccumulator >= timerInterval){
+            if (chip8.delayTimer>0)
+                chip8.delayTimer--;
+            if (chip8.soundTimer>0)
+                chip8.soundTimer--;
+            sound_set_enabled(chip8.soundTimer > 0);
+            sound_set_xo_enabled(chip8.soundTimer > 0);
+            timerAccumulator -= timerInterval;
         }
 
         if (frameAccumulator >= frameTime) {

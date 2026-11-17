@@ -4,6 +4,13 @@
 #include <stdint.h>
 #include <string.h>
 
+static int instruction_length(Chip8 *chip8) {
+    uint16_t next = (chip8->memory[chip8->pc] << 8)
+                  | chip8->memory[chip8->pc + 1];
+
+    return next == 0xF000 ? 4 : 2;
+}
+
 uint8_t randomByte(){
     uint8_t random_num = rand() % (255 - 0 + 1) + 0;
     return random_num;
@@ -31,19 +38,19 @@ void chip8_2NNN(Chip8 *chip8, uint16_t nnn){
 
 void chip8_3XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
     if (chip8->V[x]==kk) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);;
     }
 }
 
 void chip8_4XKK(Chip8 *chip8, uint8_t x, uint8_t kk){
     if (chip8->V[x]!=kk) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);
     }
 }
 
 void chip8_5XY0(Chip8 *chip8, uint8_t x, uint8_t y){
     if (chip8->V[x]==chip8->V[y]) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);
     }
 }
 
@@ -118,7 +125,7 @@ void chip8_8XYE(Chip8 *chip8, uint8_t x, uint8_t y){
 
 void chip8_9XY0(Chip8 *chip8, uint8_t x, uint8_t y){
     if (chip8->V[x]!=chip8->V[y]) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);
     }
 }
 
@@ -136,13 +143,13 @@ void chip8_CXKK(Chip8 *chip8, uint8_t x, uint8_t kk){
 
 void chip8_EX9E(Chip8 *chip8, uint8_t x){
     if (chip8->keypad[chip8->V[x]]==1) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);
     }
 }
 
 void chip8_EXA1(Chip8 *chip8, uint8_t x){
     if (chip8->keypad[chip8->V[x]]==0) {
-        chip8->pc+=2;
+        chip8->pc+=instruction_length(chip8);
     }
 }
 
@@ -209,7 +216,7 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     int x_cord = chip8->V[x];
     int y_cord = chip8->V[y];
     chip8->V[0xF]=0;
-    int width = (n == 0 && chip8->high_res) ? 16 : 8;
+    int width = (n == 0) ? 16 : 8;
     int height = (n == 0) ? 16 : n;
     for (int plane = 0; plane < 2; plane++)
     {
