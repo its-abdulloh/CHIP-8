@@ -21,12 +21,12 @@ uint16_t wrong_opcode=0;
 
 Chip8 chip8;
 
-const double instructionTime = 1.0 / 10000.0;
+const double instructionTime = 1.0 / 12000.0;
 const double timerInterval = 1.0/ 60.0;
-const double vblankInterval = 1.0 / 60.0;
-double vblankAccumulator = 0;
 double accumulator = 0.0;
 double timerAccumulator = 0.0;
+const double frameTime = 1.0 / 60.0;
+double frameAccumulator = 0.0;
 
 int map_key(SDL_Keycode key)
 {
@@ -240,12 +240,12 @@ void decode_exec(){
         }
         break;
         case 0xF:
-        if (nnn==0x000){
+        if ((chip8.opcode & 0xFFFF) == 0xF000){
             uint16_t nnnn = chip8.memory[chip8.pc]*256+chip8.memory[chip8.pc+1];
             chip8.pc+=2;
             xochip_F000_NNNN(&chip8, nnnn);
         }
-        else if (nnn == 0x002) {
+        else if ((chip8.opcode & 0xFFFF) == 0xF002) {
             xochip_F002(&chip8);
             sound_load_buffer(chip8.audio_buffer);
         }
@@ -322,12 +322,7 @@ int main(int argc, char *argv[]){
         start = now;
         accumulator += deltaTime;
         timerAccumulator += deltaTime;
-        vblankAccumulator += deltaTime;
-
-        if (vblankAccumulator >= vblankInterval) {
-            vblankAccumulator -= vblankInterval;
-            chip8.vblank = 1;
-        }
+        frameAccumulator += deltaTime;
         
 
         while (accumulator >= instructionTime){
@@ -365,9 +360,13 @@ int main(int argc, char *argv[]){
             }
         }
 
-        if (chip8.draw_flag){
-            draw(chip8.video[0],chip8.video[1]);
-            chip8.draw_flag = 0;
+        if (frameAccumulator >= frameTime) {
+            if (chip8.draw_flag) {
+                draw(chip8.video[0], chip8.video[1]);
+                chip8.draw_flag = 0;
+            }
+
+            frameAccumulator -= frameTime;
         }
 
         SDL_Delay(1);
@@ -375,4 +374,3 @@ int main(int argc, char *argv[]){
     display_quit();
     return EXIT_SUCCESS;
 }
-

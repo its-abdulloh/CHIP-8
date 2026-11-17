@@ -36,7 +36,6 @@ typedef struct
     //audio buffer
     uint8_t audio_buffer[16];
     uint8_t pitch;
-    int vblank;
 } Chip8;
 
 void save_rpl(Chip8 *chip8);

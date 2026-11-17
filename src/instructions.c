@@ -9,12 +9,8 @@ uint8_t randomByte(){
     return random_num;
 }
 
-void chip8_00E0(Chip8 *chip8){
-    for (int plane=0; plane<2; plane++) {
-        if (!(chip8->plane & (1<<plane)))
-            continue;
-        memset(chip8->video[plane], 0, sizeof(chip8->video[plane]));
-    }
+void chip8_00E0(Chip8 *chip8) {
+    memset(chip8->video, 0, sizeof(chip8->video));
     chip8->draw_flag = 1;
 }
 
@@ -213,14 +209,8 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
     int x_cord = chip8->V[x];
     int y_cord = chip8->V[y];
     chip8->V[0xF]=0;
-    int width = (n == 0) ? 16 : 8;
+    int width = (n == 0 && chip8->high_res) ? 16 : 8;
     int height = (n == 0) ? 16 : n;
-    
-    if (!chip8->vblank) {
-        chip8->pc-=2;
-        return;
-    }
-
     for (int plane = 0; plane < 2; plane++)
     {
         if (!(chip8->plane & (1 << plane)))
@@ -274,7 +264,6 @@ void chip8_DXYN(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n){
             }
         }
     }
-    chip8->vblank = 0;
     chip8->draw_flag = 1;
 }
 
