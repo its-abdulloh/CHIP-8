@@ -289,6 +289,7 @@ void superchip_00FE(Chip8 *chip8){
 }
 
 void superchip_00CN(Chip8 *chip8, uint8_t n){
+     n = chip8->high_res ? n : n * 2;
     for (int plane = 0; plane < 2; plane++)
     {
         if (!(chip8->plane & (1 << plane)))
