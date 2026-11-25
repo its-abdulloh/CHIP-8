@@ -33,7 +33,7 @@ int display_init(){
     return 0;
 }
 
-void draw(uint32_t video[]) {
+void draw(uint8_t video[]) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
