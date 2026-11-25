@@ -26,7 +26,7 @@ typedef struct
     //keypad
     uint8_t keypad[16];
     //graphics
-    uint32_t video[WIDTH*HEIGHT];
+    uint8_t video[WIDTH*HEIGHT];
     //operation code
     uint16_t opcode;
     int draw_flag;
